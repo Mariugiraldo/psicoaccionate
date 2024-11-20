@@ -1,0 +1,8 @@
+# Ignorar configuraciones de IDE
+../../.idea/
+
+# Ignorar archivos temporales del sistema
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
