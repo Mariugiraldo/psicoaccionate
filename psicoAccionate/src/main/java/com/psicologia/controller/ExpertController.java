@@ -3,8 +3,8 @@ package com.psicologia.controller;
 import com.psicologia.dto.ExpertDTO;
 import com.psicologia.exception.ResourceNotFoundException;
 import com.psicologia.model.Expert;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.psicologia.service.ExpertService;
 import java.util.List;
@@ -18,27 +18,35 @@ public class ExpertController {
     @Autowired
     private ExpertService expertService;
 
+    public ExpertController(ExpertService expertService){
+        this.expertService = expertService;
+    }
+
     @GetMapping
-    public List<Expert> getAllexperts() {
+    public List<ExpertDTO> getAllexperts() {
         return expertService.getAllExperts();
     }
 
     @GetMapping("/{id}")
-    public Expert findExpertById(@PathVariable Long id) throws ResourceNotFoundException{
-       Expert expert = expertService.findById(id);
-       if(expert == null){
-           throw new ResourceNotFoundException("Expert not found with id: " + id);
-       }
-        return expert;
-    }
+    public Expert findExpertById(@PathVariable ("id") Long id) {
+        return expertService.findById(id);}
+
 
     @PostMapping
-    public Expert saveExpert(@RequestBody Expert expertDTO) throws ResourceNotFoundException{
+    public ExpertDTO saveExpert(@Valid @RequestBody ExpertDTO expertDTO) {
+//        if (expertDTO == null){
+//            throw new IllegalArgumentException("The expert's data cannot be null");
+//        }
+//        Expert expert = new Expert();
+
         return expertService.saveExpert(expertDTO);
     }
 
+
+
     @DeleteMapping("/{id}")
-    public String deleteByIdexpert (@PathVariable("id") Long id ){ return expertService.deleteByIdExpert(id);
+    public String deleteByIdexpert (@PathVariable("id") Long id ){
+        return expertService.deleteByIdExpert(id);
     }
 
     @PutMapping

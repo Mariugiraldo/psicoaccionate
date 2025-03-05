@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
@@ -44,21 +43,21 @@ public class Person {
 
     private String gender;
 
-    private String maritalStatus;
+    //private String maritalStatus;
 
-    private Blob picture;
+    //private Blob picture;
 
-    private LocalDateTime createdAt;
+   // private LocalDateTime createdAt;
 
-    private String createdBy;
+   // private String createdBy;
 
-    private LocalDateTime updatedAt;
+   // private LocalDateTime updatedAt;
 
-    private String updatedBy;
+    //private String updatedBy;
 
-    public Person(String name, String lastname, String email, LocalDate birthdate,
-                  String documentType, String document, String country, String city,
-                  String phone, String gender) {
+
+    public Person(Long id, String name, String lastname, String email, LocalDate birthdate, String documentType, String document, String country, String city, String zipcode, String address, String phone, String gender) {
+        this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -67,6 +66,8 @@ public class Person {
         this.document = document;
         this.country = country;
         this.city = city;
+        this.zipcode = zipcode;
+        this.address = address;
         this.phone = phone;
         this.gender = gender;
     }
