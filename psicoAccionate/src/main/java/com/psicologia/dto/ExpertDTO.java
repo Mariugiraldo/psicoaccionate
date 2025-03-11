@@ -1,23 +1,22 @@
 package com.psicologia.dto;
 
-import com.psicologia.model.Person;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExpertDTO {
+
+    private Long id;
 
     @NotBlank(message = "The name is mandatory")
     private String name;
@@ -54,7 +53,8 @@ public class ExpertDTO {
 
     private boolean status;
 
-    public ExpertDTO(String name, String email, String profession, String area, boolean status) {
+    public ExpertDTO(Long id,String name, String email, String profession, String area, boolean status) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.profession = profession;

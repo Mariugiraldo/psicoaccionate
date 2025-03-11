@@ -12,6 +12,7 @@ public class ExpertMapper {
             return null;
         }
         Expert expertEntity = new Expert();
+        expertEntity.setId(expertDTO.getId());
         expertEntity.setName(expertDTO.getName());
         expertEntity.setLastname(expertDTO.getLastname());
         expertEntity.setEmail(expertDTO.getEmail());
@@ -36,6 +37,7 @@ public class ExpertMapper {
         }
 
         ExpertDTO expertDTO = new ExpertDTO();
+        expertDTO.setId(expert.getId());
         expertDTO.setName(expert.getName());
         expertDTO.setLastname(expert.getLastname());
         expertDTO.setEmail(expert.getEmail());

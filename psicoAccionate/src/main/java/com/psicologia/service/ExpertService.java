@@ -7,17 +7,18 @@ import com.psicologia.model.Expert;
 import com.psicologia.repository.IExpertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ExpertService {
-    @Autowired
+
     private IExpertRepository iExpertRepository;
     private ExpertMapper expertMapper;
 
-    public ExpertService(IExpertRepository iExpertRepository, ExpertMapper expertMapper){
+    @Autowired
+    public ExpertService(IExpertRepository iExpertRepository, ExpertMapper expertMapper) {
         this.iExpertRepository = iExpertRepository;
         this.expertMapper = expertMapper;
     }
@@ -33,35 +34,50 @@ public class ExpertService {
         if (expertDTO == null) {
             throw new ResourceNotFoundException("Expert cannot be null");
         }
-        Expert expertEntity = expertMapper.mapToEntity(expertDTO);
-        Expert savedExpert= iExpertRepository.save(expertEntity);
+        Expert expertEntity = expertMapper.mapToEntity(expertDTO); //Convertir DTO a entidad
+        Expert savedExpert = iExpertRepository.save(expertEntity); //Guardar en bd
 
-        return expertMapper.mapToDTO(savedExpert);
+        return expertMapper.mapToDTO(savedExpert); //convertir la entidad a DTO y devolverla
     }
 
-    public Expert findById(Long id) {
-        return iExpertRepository.findById(id)
+    public ExpertDTO findById(Long id) {
+        Expert expert = iExpertRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Expert not found with id: " + id));
+        return expertMapper.mapToDTO(expert); //convertir la entidad a DTO
     }
 
     public String deleteByIdExpert(Long id) {
-        Expert expert = iExpertRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("There is no registered expert with the id: " + id));
-
-        iExpertRepository.delete(expert);
-        return "The expert registered with the id was successfully deleted: " + id;
+        if (!iExpertRepository.existsById(id)) {
+            throw new ResourceNotFoundException("There is no registered expert with the id: " + id);
+        }
+        iExpertRepository.deleteById(id);
+        return "The expert with id " + id + " was successfully deleted.";
     }
 
+    public ExpertDTO updateExpert(Long id, ExpertDTO expertDTO) {
+        Expert expert = iExpertRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("The expert with ID " + id + " does not exist"));
 
-    public Expert updateExpert(Long id, ExpertDTO expertDTO) {
-        return iExpertRepository.findById(id)
-                .map(existingExpert -> {
-                    existingExpert.setProfession(expertDTO.getProfession());
-                    existingExpert.setArea(expertDTO.getArea());
-                    existingExpert.setStatus(expertDTO.isStatus());
-                    return iExpertRepository.save(existingExpert);
-                })
-                .orElseThrow(() -> new ResourceNotFoundException("Expert not found with id: " + id));
+        expert.setName(expertDTO.getName());
+        expert.setLastname(expertDTO.getLastname());
+        expert.setEmail(expertDTO.getEmail());
+        expert.setBirthdate(expertDTO.getBirthdate());
+        expert.setDocumentType(expertDTO.getDocumentType());
+        expert.setDocument(expertDTO.getDocument());
+        expert.setCountry(expertDTO.getCountry());
+        expert.setCity(expertDTO.getCity());
+        expert.setZipcode(expertDTO.getZipcode());
+        expert.setAddress(expertDTO.getAddress());
+        expert.setPhone(expertDTO.getPhone());
+        expert.setGender(expertDTO.getGender());
+        expert.setProfession(expertDTO.getProfession());
+        expert.setArea(expertDTO.getArea());
+        expert.setStatus(expertDTO.isStatus());
+
+        Expert updateExpert = iExpertRepository.save(expert);
+
+        return expertMapper.mapToDTO(updateExpert);
+
     }
 }
 
